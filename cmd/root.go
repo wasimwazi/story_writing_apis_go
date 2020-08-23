@@ -10,8 +10,8 @@ func Begin() {
 	if err != nil {
 		log.WithFields(
 			log.Fields{
-				"function": "Begin",
-			}).Info("Error : ", err.Error())
+				"Function": "Begin()",
+			}).Debug("Error : ", err.Error())
 		panic(err)
 	}
 	SetLogLevel()
@@ -19,8 +19,8 @@ func Begin() {
 	if err != nil {
 		log.WithFields(
 			log.Fields{
-				"function": "Begin()",
-			}).Info("Error : Database connection failed! ", err.Error())
+				"Function": "Begin()",
+			}).Debug("Error : Database connection failed! ", err.Error())
 		panic(err)
 	} else {
 		app := NewApp(db)

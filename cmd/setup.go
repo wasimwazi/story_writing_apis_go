@@ -18,7 +18,7 @@ func prepareDatabase() (*sql.DB, error) {
 	logrus.WithFields(
 		logrus.Fields{
 			"Function": "prepareDatabase()",
-		}).Info("App : Database connected successfully!")
+		}).Debug("App : Database connected successfully!")
 	return db, nil
 }
 
@@ -28,7 +28,7 @@ func getServerAddr() string {
 		logrus.WithFields(
 			logrus.Fields{
 				"Function": "getServerAddr()",
-			}).Info("App : SERVER PORT environment variable required but not set")
+			}).Debug("App : SERVER PORT environment variable required but not set")
 		os.Exit(1)
 	}
 	addr := ":" + port
@@ -57,10 +57,10 @@ func SetLogLevel() {
 	level, ok := os.LookupEnv("VERLOOP_DEBUG")
 
 	if !ok {
-		level = "trace"
+		level = "error"
 	}
 	if level != "true" {
-		level = "trace"
+		level = "error"
 	}
 	// parse string, this is built-in feature of logrus
 	loglevel, err := logrus.ParseLevel(level)

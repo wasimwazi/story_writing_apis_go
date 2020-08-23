@@ -26,6 +26,6 @@ func (a *App) Serve(addr string) {
 	logrus.WithFields(
 		logrus.Fields{
 			"Function": "getServerAddr()",
-		}).Info("App : Server is listening...")
+		}).Debug("App : Server is listening...")
 	http.ListenAndServe(addr, router)
 }

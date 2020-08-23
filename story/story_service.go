@@ -3,7 +3,6 @@ package story
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"storyapi/utils"
 	"strings"
 )
@@ -106,7 +105,6 @@ func (service *Service) GetStory(id int) (*StoryData, error) {
 			sp.SentenceNumber = v.SentenceNumber
 			sentenceMap[sp] = append(sentenceMap[sp], v.Word)
 		}
-		log.Println(len(sentenceMap))
 		sentenceStringMap := make(map[SentencePara]string)
 		for k, v := range sentenceMap {
 			sentenceStringMap[k] = strings.Join(v, " ")

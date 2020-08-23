@@ -2,6 +2,7 @@ package story
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -180,6 +181,9 @@ func (pg *PostgresRepo) GetStory(id int) (*SingleStory, error) {
 			id = $1
 	`
 	err := pg.DB.QueryRow(query, id).Scan(&story.ID, &story.Title, &story.CreatedAt, &story.UpdatedAt)
+	if err == sql.ErrNoRows {
+		return nil, errors.New("The given story id is invalid")
+	}
 	if err != nil {
 		return nil, err
 	}

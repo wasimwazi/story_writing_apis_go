@@ -1,0 +1,33 @@
+version: '3.0'
+services: 
+  db:
+    image: postgres:9.6.5-alpine
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=story
+      - POSTGRES_PASSWORD=verloop2020
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    container_name: story-api-db
+    networks: 
+      - v1
+  app:
+    build:
+      dockerfile: Go.Dockerfile
+      context: .
+    ports: 
+      - 3000:3000
+    depends_on:
+      - db
+    restart: on-failure:10
+    networks:
+      - v1
+
+    env_file: 
+      - config/docker.env
+networks:
+  v1:
+    

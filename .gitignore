@@ -1,1 +1,1 @@
-*.env
+config/development.env

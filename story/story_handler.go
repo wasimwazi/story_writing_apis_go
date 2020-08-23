@@ -33,7 +33,7 @@ func NewHTTPHandler(db *sql.DB) HandlerInterface {
 	}
 }
 
-//AddStory : to post stories
+//AddStory : Handler for POST /add request
 func (sh *Handler) AddStory(w http.ResponseWriter, r *http.Request) {
 	log.WithFields(
 		log.Fields{
@@ -81,7 +81,7 @@ func (sh *Handler) AddStory(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-//GetStoryList : GET /stories endpoint
+//GetStoryList : Handler for GET /stories request
 func (sh *Handler) GetStoryList(w http.ResponseWriter, r *http.Request) {
 	log.WithFields(
 		log.Fields{
@@ -93,7 +93,7 @@ func (sh *Handler) GetStoryList(w http.ResponseWriter, r *http.Request) {
 		Sort:   utils.SortBy,
 		Order:  utils.DESC,
 	}
-	request, err := validateGetStories(&req, r)
+	request, err := ValidateGetStories(&req, r)
 	if err != nil {
 		log.WithFields(
 			log.Fields{
@@ -122,7 +122,7 @@ func (sh *Handler) GetStoryList(w http.ResponseWriter, r *http.Request) {
 	utils.Send(w, utils.Success, stories)
 }
 
-//GetStory : GET /stories/{id} endpoint
+//GetStory : Handler for GET /stories/{id} request
 func (sh *Handler) GetStory(w http.ResponseWriter, r *http.Request) {
 	log.WithFields(
 		log.Fields{

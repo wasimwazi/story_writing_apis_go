@@ -10,8 +10,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+//prepareDatabase : function to prepare database connection
 func prepareDatabase() (*sql.DB, error) {
-	db, err := preparePostgres()
+	db, err := preparePostgres() 
 	if err != nil {
 		return nil, err
 	}
@@ -22,6 +23,7 @@ func prepareDatabase() (*sql.DB, error) {
 	return db, nil
 }
 
+//getServerAddr : To get the Server Port value from env
 func getServerAddr() string {
 	port, ok := os.LookupEnv("SERVER_PORT")
 	if !ok {

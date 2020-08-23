@@ -22,7 +22,7 @@ func Send(w http.ResponseWriter, status int, payload interface{}) {
 	w.Write(result)
 }
 
-// Fail : General function to send api response
+// Fail : General function to send api error response
 func Fail(w http.ResponseWriter, status int, details string) {
 	response := &CustomError{
 		Error: details,

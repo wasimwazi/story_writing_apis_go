@@ -14,14 +14,14 @@ type Story struct {
 	CurrentSentence string `json:"current_sentence"`
 }
 
-//WordCount : To get the story word count
+//WordCount : Struct to represent story and word count
 type WordCount struct {
 	StoryID    int
 	StoryTitle string
 	WordCount  int
 }
 
-//GetStoryRequest : Story List Request Struct
+//GetStoryRequest : Story listing request Struct
 type GetStoryRequest struct {
 	Limit  int    `json:"limit"`
 	Offset int    `json:"offset"`
@@ -29,7 +29,7 @@ type GetStoryRequest struct {
 	Order  string `json:"order"`
 }
 
-//SingleStory : Single story struct
+//SingleStory : Story struct to represent a single story
 type SingleStory struct {
 	ID        int       `json:"id"`
 	Title     string    `json:"title"`
@@ -45,21 +45,21 @@ type StoryList struct {
 	Results []SingleStory `json:"results"`
 }
 
-//Sentence : For a single sentence
+//Sentence : To represent a single sentence
 type Sentence []string
 
-//SentencePara : Sentence paragraph number struct
+//SentencePara : Sentence and paragraph number struct
 type SentencePara struct {
 	SentenceNumber int
 	ParaNumber     int
 }
 
-//Paragraph : Story paragraph struct
+//Paragraph : To represent story paragraph struct
 type Paragraph struct {
 	Sentences []string `json:"sentences"`
 }
 
-//StoryData : Story detail struct
+//StoryData : To represent details of a story
 type StoryData struct {
 	ID        int         `json:"id"`
 	Title     string      `json:"title"`
@@ -68,7 +68,7 @@ type StoryData struct {
 	Paragraph []Paragraph `json:"paragraph"`
 }
 
-//Words : Story words struct
+//Words : Struct to represent a word
 type Words struct {
 	ID             int
 	Word           string

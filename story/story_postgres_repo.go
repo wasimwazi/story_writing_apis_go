@@ -6,12 +6,12 @@ import (
 	"fmt"
 )
 
-// PostgresRepo : User Repo Struct for Postgres
+// PostgresRepo : Story Repo Struct for Postgres
 type PostgresRepo struct {
 	DB *sql.DB
 }
 
-//GetLatestStory : Postgres function to add a story
+//GetLatestStory : Postgres function to get the latest story
 func (pg *PostgresRepo) GetLatestStory() (*WordCount, error) {
 	var wordcount WordCount
 	query := `
@@ -45,7 +45,7 @@ func (pg *PostgresRepo) GetLatestStory() (*WordCount, error) {
 	return &wordcount, nil
 }
 
-//CreateNewStory : Create a new story in story table
+//CreateNewStory : Poatgres function to create a new story in story table
 func (pg *PostgresRepo) CreateNewStory(word string) (*Story, error) {
 	query := `
 		INSERT INTO story (title, created_at, updated_at) 
@@ -60,7 +60,7 @@ func (pg *PostgresRepo) CreateNewStory(word string) (*Story, error) {
 	return &story, nil
 }
 
-//UpdateStoryTitle : To update the title of story
+//UpdateStoryTitle : Postgres function to update the title of story
 func (pg *PostgresRepo) UpdateStoryTitle(id int, word string) error {
 	query := `
 		UPDATE 
@@ -75,15 +75,17 @@ func (pg *PostgresRepo) UpdateStoryTitle(id int, word string) error {
 	return err
 }
 
-//UpdateStoryWord : Update the words in story
+//UpdateStoryWord : Postgres function to update the words in words table
 func (pg *PostgresRepo) UpdateStoryWord(id int, word string, sentenceNumber int, paraNumber int) error {
 	tx, err := pg.DB.Begin()
 	if err != nil {
 		return err
 	}
 	query := `
-		INSERT INTO words (word, sentence_number, para_number, story_id)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO words 
+			(word, sentence_number, para_number, story_id)
+		VALUES 
+			($1, $2, $3, $4)
 	`
 	_, err = tx.Exec(query, word, sentenceNumber, paraNumber, id)
 	if err != nil {
@@ -111,7 +113,7 @@ func (pg *PostgresRepo) UpdateStoryWord(id int, word string, sentenceNumber int,
 	return nil
 }
 
-//GetCurrentSentence : To get the current sentence
+//GetCurrentSentence : Postgres function to get the current sentence
 func (pg *PostgresRepo) GetCurrentSentence(id int, sentenceNumber int) ([]string, error) {
 	var sentence []string
 	query := `
@@ -141,7 +143,7 @@ func (pg *PostgresRepo) GetCurrentSentence(id int, sentenceNumber int) ([]string
 	return sentence, nil
 }
 
-//GetStoryList : To get the list of stories
+//GetStoryList : Postgres function to get the list of stories based on request parameters
 func (pg *PostgresRepo) GetStoryList(request *GetStoryRequest) ([]SingleStory, error) {
 	var stories []SingleStory
 	mainQuery := `
@@ -169,7 +171,7 @@ func (pg *PostgresRepo) GetStoryList(request *GetStoryRequest) ([]SingleStory, e
 	return stories, nil
 }
 
-//GetStory : To get the details of a single story
+//GetStory : Postgres function to get the details of a single story from story table
 func (pg *PostgresRepo) GetStory(id int) (*SingleStory, error) {
 	var story SingleStory
 	query := `
@@ -190,7 +192,7 @@ func (pg *PostgresRepo) GetStory(id int) (*SingleStory, error) {
 	return &story, nil
 }
 
-//GetWordsInStory : To get all the words in a story
+//GetWordsInStory : Postgres function to get all the words in a story from words table
 func (pg *PostgresRepo) GetWordsInStory(id int) ([]Words, error) {
 	var words []Words
 	query := `

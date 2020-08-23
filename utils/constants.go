@@ -10,7 +10,7 @@ const (
 	//DefaultOffset : Default value of offset paremeter
 	DefaultOffset = 0
 
-	//SortBy : Default sort_by value
+	//SortBy : Default sort value
 	SortBy = "created_at"
 
 	//DESC : Descending Order

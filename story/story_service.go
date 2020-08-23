@@ -34,6 +34,7 @@ func (service *Service) AddStory(request *AddStoryRequest) (*Story, int, error) 
 		return nil, utils.InternalServerError, err
 	}
 	story.ID = wordcount.StoryID
+	//Checking whether to create a new story
 	if wordcount.StoryID == 0 || wordcount.WordCount == utils.MaxStoryWordCount {
 		story, err := service.storyRepo.CreateNewStory(request.Word)
 		if err != nil {
@@ -41,7 +42,9 @@ func (service *Service) AddStory(request *AddStoryRequest) (*Story, int, error) 
 		}
 		return story, utils.Created, nil
 	}
+
 	if wordcount.WordCount == 0 {
+		//If word count is zero and title is less than two words, update the title
 		if len(strings.Split(wordcount.StoryTitle, " ")) == 1 {
 			word := fmt.Sprintf("%s %s", wordcount.StoryTitle, request.Word)
 			err = service.storyRepo.UpdateStoryTitle(wordcount.StoryID, word)
@@ -52,12 +55,14 @@ func (service *Service) AddStory(request *AddStoryRequest) (*Story, int, error) 
 			return &story, utils.Success, nil
 		}
 	}
-	sentenceNumber := (wordcount.WordCount / utils.SentenceLength) + 1
-	paraNumber := (wordcount.WordCount / utils.WordsInParagraph) + 1
+	//If word count is not zero or title equal to two words, update the word to story
+	sentenceNumber := (wordcount.WordCount / utils.SentenceLength) + 1 //Current sentence number is calculated to update into the DB
+	paraNumber := (wordcount.WordCount / utils.WordsInParagraph) + 1   //Current paragraph number is calculated to update into the DB
 	err = service.storyRepo.UpdateStoryWord(wordcount.StoryID, request.Word, sentenceNumber, paraNumber)
 	if err != nil {
 		return nil, utils.InternalServerError, err
 	}
+	//After updating the story, the current sentence is fetched to add to response
 	currentSentence, err := service.storyRepo.GetCurrentSentence(story.ID, sentenceNumber)
 	if err != nil {
 		return nil, utils.InternalServerError, err
@@ -76,7 +81,7 @@ func (service *Service) GetStoryList(request *GetStoryRequest) (*StoryList, erro
 	if err != nil {
 		return nil, err
 	}
-	storylist.Count = len(stories)
+	storylist.Count = len(stories) //To get the count of stories
 	storylist.Results = stories
 	return &storylist, nil
 }
@@ -92,12 +97,13 @@ func (service *Service) GetStory(id int) (*StoryData, error) {
 	storydata.Title = story.Title
 	storydata.CreatedAt = story.CreatedAt
 	storydata.UpdatedAt = story.UpdatedAt
-	words, err := service.storyRepo.GetWordsInStory(id)
+	words, err := service.storyRepo.GetWordsInStory(id) //To get all the words associated with a story
 	if err != nil {
 		return nil, err
 	}
 	var paraArray []Paragraph
 	if len(words) > 0 {
+		//Make the sentence from the story
 		sentenceMap := make(map[SentencePara]Sentence)
 		for _, v := range words {
 			var sp SentencePara
@@ -105,20 +111,24 @@ func (service *Service) GetStory(id int) (*StoryData, error) {
 			sp.SentenceNumber = v.SentenceNumber
 			sentenceMap[sp] = append(sentenceMap[sp], v.Word)
 		}
+		//Convert the slice of string to string
 		sentenceStringMap := make(map[SentencePara]string)
 		for k, v := range sentenceMap {
 			sentenceStringMap[k] = strings.Join(v, " ")
 		}
-		paragraphSentence := make(map[int][]string)
+		//Make the paragraph from sentences
+		paragraphSentenceMap := make(map[int][]string)
 		for k, v := range sentenceStringMap {
-			paragraphSentence[k.ParaNumber] = append(paragraphSentence[k.ParaNumber], v)
+			paragraphSentenceMap[k.ParaNumber] = append(paragraphSentenceMap[k.ParaNumber], v)
 		}
+		//Make the paragraph struct with sentences
 		paragraphMap := make(map[int]Paragraph)
-		for k, v := range paragraphSentence {
+		for k, v := range paragraphSentenceMap {
 			var p Paragraph
 			p.Sentences = v
 			paragraphMap[k] = p
 		}
+		//Make the array of paragraphs from paragraph struct
 		for _, v := range paragraphMap {
 			paraArray = append(paraArray, v)
 		}

@@ -14,7 +14,7 @@ type Repo interface {
 	GetWordsInStory(int) ([]Words, error)
 }
 
-// NewRepo : Returns User Repo
+// NewRepo : Returns Story Repo
 func NewRepo(db *sql.DB) Repo {
 	return &PostgresRepo{
 		DB: db,

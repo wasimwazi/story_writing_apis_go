@@ -17,7 +17,9 @@ func ValidatePost(request AddStoryRequest) error {
 	return nil
 }
 
-func validateGetStories(request *GetStoryRequest, r *http.Request) (*GetStoryRequest, error) {
+//ValidateGetStories : Function to validate the get stories request
+func ValidateGetStories(request *GetStoryRequest, r *http.Request) (*GetStoryRequest, error) {
+	//Validating the limit parameter in request
 	limit := r.URL.Query().Get("limit")
 	if limit != "" {
 		Limit, err := strconv.Atoi(limit)
@@ -26,6 +28,7 @@ func validateGetStories(request *GetStoryRequest, r *http.Request) (*GetStoryReq
 		}
 		request.Limit = Limit
 	}
+	//Validating the offset parameter in request
 	offset := r.URL.Query().Get("offset")
 	if offset != "" {
 		storyOffset, err := strconv.Atoi(offset)
@@ -34,6 +37,7 @@ func validateGetStories(request *GetStoryRequest, r *http.Request) (*GetStoryReq
 		}
 		request.Offset = storyOffset
 	}
+	//Validating sort parameter in request
 	sort := r.URL.Query().Get("sort")
 	if sort != "" {
 		if sort != utils.CREATEDAT && sort != utils.UPDATEDAT && sort != utils.TITLE {
@@ -41,12 +45,14 @@ func validateGetStories(request *GetStoryRequest, r *http.Request) (*GetStoryReq
 		}
 		request.Sort = sort
 	}
+	//Validating order parameter in request
 	order := r.URL.Query().Get("order")
 	if order != "" {
 		if order != utils.ASC && order != utils.DESC {
 			return nil, errors.New("invalid query parameter, order")
 		}
-		request.Sort = order
+		request.Order = order
 	}
+	//Returning the request struct with the parameters from the incoming request
 	return request, nil
 }

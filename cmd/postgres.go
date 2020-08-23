@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+//preparePostgres : Function to prepare postgres BD
 func preparePostgres() (*sql.DB, error) {
 	url, err := getURL()
 	if err != nil {
@@ -22,6 +23,7 @@ func preparePostgres() (*sql.DB, error) {
 	return db, nil
 }
 
+//getURL : Function to get postgres DB connection url from env
 func getURL() (string, error) {
 	psqlURL, ok := os.LookupEnv("VERLOOP_DSN")
 	if !ok {

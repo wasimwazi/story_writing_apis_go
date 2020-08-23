@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE story (
+CREATE TABLE IF NOT EXISTS story (
     id SERIAL NOT NULL ,
     title character varying(100) NOT NULL,
     created_at timestamp NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE story (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE words (
+CREATE TABLE IF NOT EXISTS words (
     id SERIAL NOT NULL, 
     story_id INT NOT NULL, 
     word varchar(50) NOT NULL, 

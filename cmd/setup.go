@@ -56,19 +56,15 @@ func CheckEnv() error {
 
 //SetLogLevel : To set the level of logging
 func SetLogLevel() {
-	level, ok := os.LookupEnv("VERLOOP_DEBUG")
+	isDebug, ok := os.LookupEnv("VERLOOP_DEBUG")
 
+	var level logrus.Level
 	if !ok {
-		level = "error"
+		level = logrus.ErrorLevel
 	}
-	if level != "true" {
-		level = "error"
-	}
-	// parse string, this is built-in feature of logrus
-	loglevel, err := logrus.ParseLevel(level)
-	if err != nil {
-		loglevel = logrus.DebugLevel
+	if isDebug == "true" {
+		level = logrus.DebugLevel
 	}
 	// set global log level
-	logrus.SetLevel(loglevel)
+	logrus.SetLevel(level)
 }

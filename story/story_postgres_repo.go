@@ -2,6 +2,7 @@ package story
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 // PostgresRepo : User Repo Struct for Postgres
@@ -137,4 +138,32 @@ func (pg *PostgresRepo) GetCurrentSentence(id int, sentenceNumber int) ([]string
 		sentence = append(sentence, word)
 	}
 	return sentence, nil
+}
+
+//GetStoryList : To get the list of stories
+func (pg *PostgresRepo) GetStoryList(request *GetStoryRequest) ([]SingleStory, error) {
+	var stories []SingleStory
+	mainQuery := `
+		SELECT 
+			*
+		FROM
+			story
+		%s
+		LIMIT $1 OFFSET $2
+	`
+	orderByQuery := fmt. Sprint("ORDER BY ", request.Sort, " ", request.Order)
+	query := fmt.Sprintf(mainQuery, orderByQuery)
+	rows, err := pg.DB.Query(query, request.Limit, request.Offset)
+	if err != nil {
+		return nil, err
+	}
+	var story SingleStory
+	for rows.Next() {
+		err := rows.Scan(&story.ID, &story.Title, &story.CreatedAt, &story.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		stories = append(stories, story)
+	}
+	return stories, nil
 }

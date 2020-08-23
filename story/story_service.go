@@ -11,6 +11,7 @@ import (
 //ServiceInterface : Story Service Interface
 type ServiceInterface interface {
 	AddStory(request *AddStoryRequest) (*Story, int, error)
+	GetStoryList(request *GetStoryRequest) (*StoryList, error)
 }
 
 //Service : Story Service Struct
@@ -38,7 +39,6 @@ func (service *Service) AddStory(request *AddStoryRequest) (*Story, int, error) 
 		if err != nil {
 			return nil, 500, err
 		}
-		log.Println("New story:", story)
 		return story, 201, nil
 	}
 	if wordcount.WordCount == 0 {
@@ -49,7 +49,6 @@ func (service *Service) AddStory(request *AddStoryRequest) (*Story, int, error) 
 				return nil, 500, err
 			}
 			story.Title = word
-			log.Println("Update story title:", story)
 			return &story, 200, nil
 		}
 	}
@@ -65,6 +64,19 @@ func (service *Service) AddStory(request *AddStoryRequest) (*Story, int, error) 
 	}
 	story.CurrentSentence = strings.Join(currentSentence, " ")
 	story.Title = wordcount.StoryTitle
-	log.Println("Update the sentence:", story)
 	return &story, 200, nil
+}
+
+//GetStoryList : Get the list of stories
+func (service *Service) GetStoryList(request *GetStoryRequest) (*StoryList, error) {
+	var storylist StoryList
+	storylist.Limit = request.Limit
+	storylist.Offset = request.Offset
+	stories, err := service.storyRepo.GetStoryList(request)
+	if err != nil {
+		return nil, err
+	}
+	storylist.Count = len(stories)
+	storylist.Results = stories
+	return &storylist, nil
 }

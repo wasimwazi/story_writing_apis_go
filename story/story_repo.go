@@ -9,6 +9,7 @@ type Repo interface {
 	UpdateStoryTitle(int, string) error
 	UpdateStoryWord(int, string, int, int) error
 	GetCurrentSentence(int, int) ([]string, error)
+	GetStoryList(*GetStoryRequest) ([]SingleStory, error)
 }
 
 // NewRepo : Returns User Repo

@@ -29,5 +29,6 @@ func (r *ChiRouter) Setup() *chi.Mux {
 	cr := chi.NewRouter()
 	storyhandler := story.NewHTTPHandler(r.DB)
 	cr.Post("/add", storyhandler.AddStory)
+	cr.Get("/stories", storyhandler.GetStoryList)
 	return cr
 }

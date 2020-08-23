@@ -1,6 +1,6 @@
 -- +goose Up
 CREATE TABLE story (
-    id integer NOT NULL ,
+    id SERIAL NOT NULL ,
     title character varying(100),
     created_at timestamp NOT NULL,
     updated_at timestamp,

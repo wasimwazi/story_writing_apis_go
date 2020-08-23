@@ -2,6 +2,7 @@ package router
 
 import (
 	"database/sql"
+	"storyapi/story"
 
 	"github.com/go-chi/chi"
 )
@@ -26,5 +27,7 @@ func NewRouter(db *sql.DB) Router {
 // Setup : chi Router
 func (r *ChiRouter) Setup() *chi.Mux {
 	cr := chi.NewRouter()
+	storyhandler := story.NewHTTPHandler(r.DB)
+	cr.Post("/add", storyhandler.AddStory)
 	return cr
 }

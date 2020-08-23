@@ -1,0 +1,19 @@
+package story
+
+import "database/sql"
+
+//Repo : Story Repository Interface
+type Repo interface {
+	GetLatestStory() (*WordCount, error)
+	CreateNewStory(string) (*Story, error)
+	UpdateStoryTitle(int, string) error
+	UpdateStoryWord(int, string, int, int) error
+	GetCurrentSentence(int, int) ([]string, error)
+}
+
+// NewRepo : Returns User Repo
+func NewRepo(db *sql.DB) Repo {
+	return &PostgresRepo{
+		DB: db,
+	}
+}

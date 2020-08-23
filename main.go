@@ -2,11 +2,15 @@ package main
 
 import (
 	_ "fmt"
-	"log"
 	"storyapi/cmd"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	log.Println("App : Begin")
+	logrus.WithFields(
+		logrus.Fields{
+			"Function": "Main()",
+		}).Info("App : Begin")
 	cmd.Begin()
 }

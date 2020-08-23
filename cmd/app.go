@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 	"storyapi/router"
+
+	"github.com/sirupsen/logrus"
 )
 
 // App : Struct to represent this app
@@ -22,6 +23,9 @@ func NewApp(db *sql.DB) *App {
 // Serve : to Run API Server
 func (a *App) Serve(addr string) {
 	router := a.Router.Setup()
-	log.Println("App : Server is listening...")
+	logrus.WithFields(
+		logrus.Fields{
+			"Function": "getServerAddr()",
+		}).Info("App : Server is listening...")
 	http.ListenAndServe(addr, router)
 }

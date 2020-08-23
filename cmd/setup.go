@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"database/sql"
-	"os"
 	"log"
+	"os"
 
 	// go package for postgres
 	_ "github.com/lib/pq"

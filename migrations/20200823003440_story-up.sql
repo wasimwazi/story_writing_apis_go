@@ -1,7 +1,7 @@
 -- +goose Up
 CREATE TABLE story (
     id SERIAL NOT NULL ,
-    title character varying(100),
+    title character varying(100) NOT NULL,
     created_at timestamp NOT NULL,
     updated_at timestamp,
     PRIMARY KEY (id)
@@ -9,9 +9,10 @@ CREATE TABLE story (
 
 CREATE TABLE words (
     id SERIAL NOT NULL, 
-    story_id INT, word varchar(50), 
-    sentence_number INT, 
-    para_number INT, 
+    story_id INT NOT NULL, 
+    word varchar(50) NOT NULL, 
+    sentence_number INT NOT NULL, 
+    para_number INT NOT NULL, 
     PRIMARY KEY(id), 
     FOREIGN KEY(story_id) REFERENCES story(id)
 );

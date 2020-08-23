@@ -30,5 +30,6 @@ func (r *ChiRouter) Setup() *chi.Mux {
 	storyhandler := story.NewHTTPHandler(r.DB)
 	cr.Post("/add", storyhandler.AddStory)
 	cr.Get("/stories", storyhandler.GetStoryList)
+	cr.Get("/stories/{id}", storyhandler.GetStory)
 	return cr
 }

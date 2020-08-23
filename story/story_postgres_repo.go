@@ -151,7 +151,7 @@ func (pg *PostgresRepo) GetStoryList(request *GetStoryRequest) ([]SingleStory, e
 		%s
 		LIMIT $1 OFFSET $2
 	`
-	orderByQuery := fmt. Sprint("ORDER BY ", request.Sort, " ", request.Order)
+	orderByQuery := fmt.Sprint("ORDER BY ", request.Sort, " ", request.Order)
 	query := fmt.Sprintf(mainQuery, orderByQuery)
 	rows, err := pg.DB.Query(query, request.Limit, request.Offset)
 	if err != nil {
@@ -166,4 +166,50 @@ func (pg *PostgresRepo) GetStoryList(request *GetStoryRequest) ([]SingleStory, e
 		stories = append(stories, story)
 	}
 	return stories, nil
+}
+
+//GetStory : To get the details of a single story
+func (pg *PostgresRepo) GetStory(id int) (*SingleStory, error) {
+	var story SingleStory
+	query := `
+		SELECT
+			*
+		FROM
+			story
+		WHERE 
+			id = $1
+	`
+	err := pg.DB.QueryRow(query, id).Scan(&story.ID, &story.Title, &story.CreatedAt, &story.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &story, nil
+}
+
+//GetWordsInStory : To get all the words in a story
+func (pg *PostgresRepo) GetWordsInStory(id int) ([]Words, error) {
+	var words []Words
+	query := `
+		SELECT
+			id, word, sentence_number, para_number
+		FROM
+			words
+		WHERE 
+			story_id = $1
+		ORDER BY 
+			id ASC
+	`
+	rows, err := pg.DB.Query(query, id)
+	if err != nil {
+		return nil, err
+	}
+	var word Words
+	for rows.Next() {
+		err := rows.Scan(&word.ID, &word.Word, &word.SentenceNumber, &word.ParaNumber)
+		if err != nil {
+			return nil, err
+		}
+		words = append(words, word)
+	}
+	return words, nil
 }

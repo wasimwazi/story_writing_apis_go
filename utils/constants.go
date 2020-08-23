@@ -27,4 +27,13 @@ const (
 
 	//TITLE : title field
 	TITLE = "title"
+
+	//SentenceLength : No of words in a sentence
+	SentenceLength = 15
+
+	//ParaLength : No of sentences in a paragraph
+	ParaLength = 10
+
+	//WordsInParagraph : No of words in a paragraph
+	WordsInParagraph = 150
 )

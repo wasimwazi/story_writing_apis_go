@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"sync"
 
 	"net/http"
 	"storyapi/utils"
@@ -13,6 +14,8 @@ import (
 	"github.com/go-chi/chi"
 	log "github.com/sirupsen/logrus"
 )
+
+var mutex = &sync.Mutex{} //Declaring mutex vaiable
 
 //HandlerInterface : Story Handler Interface
 type HandlerInterface interface {
@@ -59,6 +62,8 @@ func (sh *Handler) AddStory(w http.ResponseWriter, r *http.Request) {
 		utils.Fail(w, utils.BadRequest, err.Error())
 		return
 	}
+	mutex.Lock()
+	defer mutex.Unlock()
 	if word.Word != "" {
 		response, status, err := sh.storyService.AddStory(&word)
 		if err != nil {

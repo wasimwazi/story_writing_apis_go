@@ -19,7 +19,3 @@
     $ docker-compose up
 
     The server will be running on port 3000
-
-## If you had more time, what would you do differently?
-    1. Add options for story edit and delete options.
-    2. Add functionality to maintain story edit history so that everyone can analyse the contributions in the story.
